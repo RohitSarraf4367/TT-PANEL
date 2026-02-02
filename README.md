@@ -1,74 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Search & Like Discovery Demo</title>
-<style>
-  body {
-    background: #0f0f0f;
-    color: white;
-    font-family: Arial;
-    padding: 20px;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    margin-bottom: 15px;
-    font-size: 16px;
-  }
-  .user {
-    background: #1c1c1c;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-  .likes {
-    color: #00ffd5;
-    font-weight: bold;
-  }
-</style>
-</head>
-<body>
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
 
-<h2>🔍 Search Account</h2>
-<input type="text" id="search" placeholder="Search username..." onkeyup="searchUser()">
+# 1. Setup the browser (Chrome)
+driver = webdriver.Chrome() 
 
-<div id="results"></div>
+def watch_video(url):
+    # 2. Open the TikTok video
+    driver.get(url)
+    print("Video opened. Watching for 20 seconds...")
+    
+    # 3. Wait (simulates watching the video)
+    time.sleep(20) 
+    
+    # 4. Find and click the 'Like' button (Example selector)
+    try:
+        like_button = driver.find_element(By.XPATH, '//span[@data-e2e="like-icon"]')
+        like_button.click()
+        print("Liked the video!")
+    except:
+        print("Could not find the like button (it might be hidden or the page changed).")
 
-<script>
-  const users = [
-    { username: "admin", likes: 10000 },
-    { username: "rohit_ai", likes: 5000 },
-    { username: "gaming_zone", likes: 2000 },
-    { username: "funny_clips", likes: 1000 },
-    { username: "study_tips", likes: 500 }
-  ];
+# Run the function
+watch_video("https://www.tiktok.com/@username/video/123456789")
 
-  function searchUser() {
-    const query = document.getElementById("search").value.toLowerCase();
-    const results = document.getElementById("results");
-    results.innerHTML = "";
-
-    // Sort by likes (popular first)
-    const filtered = users
-      .filter(u => u.username.includes(query))
-      .sort((a, b) => b.likes - a.likes);
-
-    filtered.forEach(user => {
-      results.innerHTML += `
-        <div class="user">
-          <div>👤 @${user.username}</div>
-          <div class="likes">❤️ Likes: ${user.likes}</div>
-        </div>
-      `;
-    });
-  }
-
-  // Load all users initially
-  searchUser();
-</script>
-
-</body>
-</html>
+# Keep the window open for a bit then close
+time.sleep(5)
+driver.quit
